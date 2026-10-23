@@ -323,8 +323,27 @@ To build local versions of this, for testing:
 
     $ docker build -t slack-notification-resources .
 
-Tests will run as part of the build, and be left in the image for
-future testing.  This adds about 100k to the image.
+Tests run as part of the build in a separate stage. The final image does not
+contain test files. To keep the test image for further testing:
+
+  $ docker build --target tests -t slack-notification-resource:tests .
+
+### GitHub Actions builds in this fork
+
+The build workflow tests `linux/amd64` and `linux/arm64` on pull requests,
+pushes to `master`, and `v*` tags. It also runs every Monday at 06:17 UTC.
+Builds pull the current `alpine:edge` base image. A Trivy scan blocks
+publishing when fixable HIGH or CRITICAL vulnerabilities are found.
+
+Successful push and scheduled builds in `benjaminguttmann-avtq/slack-notification-resource`
+publish `docker.io/bguttmannavtq/slack-notification-resource`. Configure the
+repository secret `DOCKERHUB_TOKEN` with a token for `bguttmannavtq` that can
+push to this image repository. Pull requests do not publish images.
+
+Images receive branch or Git-tag tags and a short SHA tag. Builds on `master`,
+including scheduled builds, also update `latest`. Scheduled workflows must be
+enabled in the fork's Actions settings, and the workflow must be present on
+the default branch.
 
 To cut a new officialy release of the
 `cfcommunity/slack-notification-resource` image on
