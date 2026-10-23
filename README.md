@@ -330,17 +330,17 @@ contain test files. To keep the test image for further testing:
 
 ### GitHub Actions builds in this fork
 
-The build workflow tests `linux/amd64` and `linux/arm64` on pull requests,
-pushes to `master`, and `v*` tags. It also runs every Monday at 06:17 UTC.
+The build workflow tests `linux/amd64` and `linux/arm64` on pushes to `master`
+and every Monday at 06:17 UTC. Pull requests and Git tags do not trigger builds.
 Builds pull the current `alpine:edge` base image. A Trivy scan blocks
 publishing when fixable HIGH or CRITICAL vulnerabilities are found.
 
 Successful push and scheduled builds in `benjaminguttmann-avtq/slack-notification-resource`
 publish `docker.io/bguttmannavtq/slack-notification-resource`. Configure the
 repository secret `DOCKERHUB_TOKEN` with a token for `bguttmannavtq` that can
-push to this image repository. Pull requests do not publish images.
+push to this image repository.
 
-Images receive branch or Git-tag tags and a short SHA tag. Builds on `master`,
+Images receive the `master` tag and a short SHA tag. Builds on `master`,
 including scheduled builds, also update `latest`. Scheduled workflows must be
 enabled in the fork's Actions settings, and the workflow must be present on
 the default branch.
